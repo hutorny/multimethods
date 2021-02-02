@@ -1,5 +1,9 @@
 #pragma once
 #include <fnv1c/fnv1c.hpp>
+#ifdef __FUNCSIG__
+#	define __PRETTY_FUNCTION__ __FUNCSIG__
+#endif
+
 namespace multimethods {
 template<class Class>
 constexpr auto class_hash() noexcept {

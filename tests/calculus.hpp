@@ -14,7 +14,13 @@ struct Expression {
 
 struct Constant : Expression {};
 struct Integer : Constant {};
-struct Float : Constant {};
+struct Float : Constant {
+  template<class B>
+  Expression* add(const B&) const {
+    TRACE();
+    return nullptr;
+  }
+};
 
 template<class A, class B>
 Expression* add(const A&, const B&);
@@ -45,10 +51,11 @@ inline Expression* add<Expression,Expression>(const Expression& a, const Express
 // These tests depends on RTTI
 #if __cpp_rtti >= 199711
   return multimethod<Expression*,
-    add<Integer, Integer>,
-    add<Float, Integer>,
-    add<Integer, Float>,
-    add<Float, Float>>::dispatch(a,b);
+    &Float::add<Integer>,
+    &add<Integer, Integer>,
+    &add<Float, Integer>,
+    &add<Integer, Float>,
+    &add<Float, Float>>::dispatch(a,b);
 #else
   return nullptr;
 #endif
@@ -70,9 +77,14 @@ inline Expression* sub<Expression,Expression>(const Expression& a, const Express
 void test(const Expression& a, const Expression& b);
 
 inline void test() {
+#if __cpp_rtti < 199711
+  std::cout << "Skipping calculus examples because of disabled RTTI" << std::endl;
+  return;
+#endif
   Integer a{};
   Integer b{};
   Float c{};
+  std::cout << "====== calculus example ======\n";
   test(a, b);
   test(c, b);
   test(a, c);

@@ -86,6 +86,7 @@ inline void test() {
   Circle circle{};
   Rect rect{};
   Square square{};
+  std::cout << "======= shapes example ======= \n";
   test(rect, circle);
   test(circle, square);
   test(circle, circle);

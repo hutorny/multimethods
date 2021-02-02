@@ -1,7 +1,11 @@
 #pragma once
 
 namespace multimethods {
-
+/*
+  resolve - a helper template for resolving overloaded functions or methods
+  Usage:
+    resolve<Shape*, const Circle&>{}(&Rect::intersect)
+*/
 template<typename Result, typename ... Args>
 struct resolve {
    template<class Class>
